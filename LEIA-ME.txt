@@ -1,0 +1,57 @@
+================================================================
+                                                                
+              PIFLOOR - SISTEMA COMPLETO                  
+                                                                
+================================================================
+
+INICIO RAPIDO (2 PASSOS):
+
+  1. Clique duas vezes em: INSTALAR.bat
+     (Aguarde a instalacao terminar - 3 a 5 minutos)
+
+  2. Clique duas vezes em: INICIAR.bat
+     (O navegador abrira automaticamente)
+
+  PRONTO! O sistema esta rodando!
+
+
+SE TIVER PROBLEMAS COM OS SCRIPTS:
+
+  Use as versoes simplificadas:
+  - INSTALAR_SIMPLES.bat
+  - INICIAR_SIMPLES.bat
+
+
+PRE-REQUISITOS:
+
+  Antes de executar INSTALAR.bat, voce precisa ter:
+
+  - Python 3.8 ou superior instalado
+    Download: https://www.python.org/downloads/
+
+  - Node.js 18 ou superior instalado
+    Download: https://nodejs.org/
+
+  - MySQL Server rodando
+    Com o banco de dados "pisos_db" criado
+
+
+URLS DE ACESSO:
+
+  Frontend: http://localhost:5173
+  Backend:  http://localhost:5000
+
+
+DOCUMENTACAO COMPLETA:
+
+  Abra o arquivo: README.md
+
+
+PROBLEMAS?
+
+  1. Verifique se Python e Node.js estao instalados
+  2. Verifique se o MySQL esta rodando
+  3. Use os scripts SIMPLES se os normais nao funcionarem
+  4. Consulte o arquivo README.md
+
+
