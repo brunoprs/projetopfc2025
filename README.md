@@ -8,7 +8,7 @@ Sistema completo de gerenciamento de pisos com frontend em React e backend em Fl
 
 ### 1️⃣ Extrair o Projeto
 
-Extraia o arquivo `pifloor_completo.zip` para qualquer pasta do seu computador (recomendado: Área de Trabalho).
+Extraia o arquivo `pifloor.zip` para qualquer pasta do seu computador (recomendado: Área de Trabalho).
 
 ### 2️⃣ Instalar Dependências
 
