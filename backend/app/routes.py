@@ -1024,3 +1024,54 @@ def handle_chat():
     except Exception as e:
         print(f"Erro na API do Gemini (endpoint /chat): {e}")
         return jsonify({"error": str(e)}), 500
+@bp.route('/admin/tips/<int:tip_id>', methods=['PUT'])
+@jwt_required()
+def update_tip(tip_id):
+    check = admin_7_required()
+    if check:
+        return check
+
+    data = request.get_json() or {}  # evita erro se vier vazio
+    tip = Tip.query.get_or_404(tip_id)
+
+    # Atualiza APENAS o que veio no JSON (não precisa mandar tudo)
+    if 'title' in data:
+        tip.title = data['title']
+    if 'content' in data:
+        tip.content = data['content']
+    if 'category' in data:
+        tip.category = data['category']
+
+    db.session.commit()
+    return jsonify({"msg": "Dica atualizada com sucesso!"}), 200
+@bp.route('/admin/tips/<int:tip_id>', methods=['DELETE'])
+@jwt_required()
+def delete_tip(tip_id):
+    # Só o admin ID 7 pode excluir
+    check = admin_7_required()
+    if check:
+        return check
+
+    tip = Tip.query.get_or_404(tip_id)
+    db.session.delete(tip)
+    db.session.commit()
+    return jsonify({"msg": "Dica excluída com sucesso!"}), 200
+
+@bp.route('/admin/faqs/<int:faq_id>', methods=['PUT'])
+@jwt_required()
+def update_faq(faq_id):
+    check = admin_7_required()
+    if check:
+        return check
+
+    data = request.get_json() or {}
+    faq = FAQ.query.get_or_404(faq_id)
+
+    if 'question' in data:
+        faq.question = data['question']
+    if 'answer' in data:
+        faq.answer = data['answer']
+
+    db.session.commit()
+    return jsonify({"msg": "FAQ atualizada com sucesso!"}), 200
+        
