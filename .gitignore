@@ -1,0 +1,14 @@
+# Cache do Python
+__pycache__/
+*.pyc
+
+# Ambiente virtual Python
+venv/
+
+# Arquivos de ambiente
+.env
+
+# Node / React
+node_modules/
+dist/
+build/
