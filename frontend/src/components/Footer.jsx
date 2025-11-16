@@ -24,11 +24,11 @@ export default function Footer() {
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>(11) 1234-5678</span>
+                <span> (11) 99992-4733</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>contato@pifloor.com.br</span>
+                <span>pifloor_pisos@outlook.com</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4" />
@@ -42,7 +42,7 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Redes Sociais</h3>
             <div className="flex space-x-4">
               <a 
-                href="https://facebook.com" 
+                href="https://www.facebook.com/people/PiFloor-Laminados-e-Vinilicos/100063654036975/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-secondary transition-colors"
@@ -50,7 +50,7 @@ export default function Footer() {
                 <Facebook className="h-6 w-6" />
               </a>
               <a 
-                href="https://instagram.com" 
+                href="https://www.instagram.com/pifloor_pisos/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-secondary transition-colors"

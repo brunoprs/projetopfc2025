@@ -1,14 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { productService } from "../../services/api";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
 
-  const initialState = { name: "", price: "", description: "", image_url: "", type: "vinilico" };
+  const initialState = {
+    name: "",
+    price: "",
+    description: "",
+    image_url: "",
+    type: "vinilico",
+  };
   const [form, setForm] = useState(initialState);
 
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState(null);
+
+  // paginação local
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // busca
+  const [search, setSearch] = useState("");
 
   const loadProducts = async () => {
     setLoading(true);
@@ -25,6 +38,29 @@ export default function AdminProducts() {
   useEffect(() => {
     loadProducts();
   }, []);
+
+  // FILTRO DE PESQUISA
+  const filteredProducts = useMemo(() => {
+    const lower = search.toLowerCase();
+    return products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(lower) ||
+        p.type.toLowerCase().includes(lower) ||
+        (p.description && p.description.toLowerCase().includes(lower))
+    );
+  }, [products, search]);
+
+  // total de páginas baseado na busca
+  const totalPages = useMemo(() => {
+    return Math.max(1, Math.ceil(filteredProducts.length / itemsPerPage));
+  }, [filteredProducts.length]);
+
+  // produtos da página atual
+  const currentProducts = useMemo(() => {
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return filteredProducts.slice(start, end);
+  }, [filteredProducts, page]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,6 +106,12 @@ export default function AdminProducts() {
     setForm(initialState);
   };
 
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const inputStyle = "border p-2 rounded-md w-full";
 
   return (
@@ -78,6 +120,7 @@ export default function AdminProducts() {
         🛒 {editingId ? "Editar Produto" : "Novo Produto"}
       </h2>
 
+      {/* FORMULÁRIO */}
       <form onSubmit={handleSubmit} className="mb-6 space-y-4">
         <div>
           <label className="block text-sm font-medium mb-1">Nome</label>
@@ -122,7 +165,9 @@ export default function AdminProducts() {
           <textarea
             placeholder="Descrição"
             value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, description: e.target.value })
+            }
             className={inputStyle}
             rows="3"
             required
@@ -141,7 +186,10 @@ export default function AdminProducts() {
         </div>
 
         <div className="flex gap-2 pt-2">
-          <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+          <button
+            type="submit"
+            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+          >
             {editingId ? "Salvar Alterações" : "Criar Produto"}
           </button>
 
@@ -157,45 +205,101 @@ export default function AdminProducts() {
         </div>
       </form>
 
-      <h3 className="text-lg font-medium mb-2">Lista de Produtos</h3>
+      {/* CAMPO DE PESQUISA */}
+      <div className="mb-4 flex justify-between items-center">
+        <h3 className="text-lg font-medium">Lista de Produtos</h3>
+        <input
+          type="text"
+          placeholder="Pesquisar produto..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+          className="border rounded-md p-2 w-64"
+        />
+      </div>
 
       {loading ? (
         <p>Carregando...</p>
       ) : (
-        <ul className="space-y-2">
-          {products.map((p) => (
-            <li key={p.id} className="flex justify-between items-center p-3 border rounded-lg bg-white shadow-sm">
-              <span className="flex items-center gap-3">
-                <img
-                  src={p.image_url || 'https://via.placeholder.com/40x40?text=Sem+Img'}
-                  alt={p.name}
-                  className="w-12 h-12 rounded-md object-cover"
-                />
-                <div>
-                  <span className="font-semibold">{p.name}</span>
-                  <span className="ml-2 bg-gray-200 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full">
-                    {p.type}
-                  </span>
-                  <p className="text-sm text-gray-600">R$ {p.price} /m²</p>
+        <>
+          <ul className="space-y-2">
+            {currentProducts.map((p) => (
+              <li
+                key={p.id}
+                className="flex justify-between items-center p-3 border rounded-lg bg-white shadow-sm"
+              >
+                <span className="flex items-center gap-3">
+                  <img
+                    src={
+                      p.image_url ||
+                      "https://via.placeholder.com/40x40?text=Sem+Img"
+                    }
+                    alt={p.name}
+                    className="w-12 h-12 rounded-md object-cover"
+                  />
+                  <div>
+                    <span className="font-semibold">{p.name}</span>
+                    <span className="ml-2 bg-gray-200 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full">
+                      {p.type}
+                    </span>
+                    <p className="text-sm text-gray-600">
+                      R$ {p.price} /m²
+                    </p>
+                  </div>
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleEdit(p)}
+                    className="bg-yellow-400 text-black px-3 py-1 rounded-md text-sm"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDelete(p.id)}
+                    className="bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                  >
+                    Excluir
+                  </button>
                 </div>
-              </span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleEdit(p)}
-                  className="bg-yellow-400 text-black px-3 py-1 rounded-md text-sm"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => handleDelete(p.id)}
-                  className="bg-red-600 text-white px-3 py-1 rounded-md text-sm"
-                >
-                  Excluir
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+
+          {/* PAGINAÇÃO */}
+          <div className="flex items-center justify-center gap-4 mt-6">
+            <button
+              type="button"
+              disabled={page <= 1}
+              onClick={() => handlePageChange(page - 1)}
+              className={`px-3 py-1 border rounded-md text-sm ${
+                page <= 1
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              Anterior
+            </button>
+
+            <span className="text-sm text-gray-600">
+              Página <strong>{page}</strong> de <strong>{totalPages}</strong>
+            </span>
+
+            <button
+              type="button"
+              disabled={page >= totalPages}
+              onClick={() => handlePageChange(page + 1)}
+              className={`px-3 py-1 border rounded-md text-sm ${
+                page >= totalPages
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              Próxima
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
