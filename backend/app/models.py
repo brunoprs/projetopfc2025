@@ -63,12 +63,6 @@ class FAQ(db.Model):
     question = db.Column(db.String(200), nullable=False)
     answer = db.Column(db.Text)
 
-class SocialMedia(db.Model):
-    __tablename__ = 'social_media'
-    id = db.Column(db.Integer, primary_key=True)
-    platform = db.Column(db.String(50), nullable=False)
-    url = db.Column(db.String(200))
-
 class Favorite(db.Model):
     __tablename__ = 'favorites'
     id = db.Column(db.Integer, primary_key=True)

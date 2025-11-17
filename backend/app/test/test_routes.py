@@ -289,19 +289,6 @@ def test_admin_cria_tip_faq_e_deleta_faq_com_options(client, make_user, make_tok
     assert r.status_code == 200
 
 # =========================
-# ADMIN: SOCIAL MEDIA
-# =========================
-
-def test_admin_cria_social_media(client, make_user, make_token):
-    admin = make_user(username="adm_s", email="adm_s@ex.com", is_admin=True)
-    tok = make_token(admin.id, is_admin=True)
-    r = client.post("/admin/social-media", json={
-        "platform": "instagram", "url": "https://insta/pifloor"
-    }, headers=_auth(tok))
-    assert r.status_code in (200, 201)
-    assert r.get_json()["social_media"]["platform"] == "instagram"
-
-# =========================
 # CHAT (sem API key) + HELPERS PRIVADOS
 # =========================
 

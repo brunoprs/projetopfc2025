@@ -4,7 +4,7 @@ import google.generativeai as genai
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from . import db, bcrypt
-from .models import Product, User, Review, Tip, FAQ, SocialMedia, Favorite, db
+from .models import Product, User, Review, Tip, FAQ, Favorite, db
 from datetime import datetime
 from flask_cors import CORS
 from sqlalchemy import func
@@ -317,7 +317,7 @@ def create_product():
 @bp.route('/admin/products/<int:product_id>', methods=['PUT', 'OPTIONS']) #ADMIN PODE EDITAR UM PRODUTO.
 @jwt_required(optional=True)
 def update_product(product_id):
-    # UPDATE de produto (apenas admin). Também trata preflight CORS.
+    # UPDATE de produto (apenas admin)
     if request.method == 'OPTIONS':
         response = jsonify({"msg": "CORS preflight ok"})
         response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
@@ -492,33 +492,6 @@ def delete_faq(faq_id):
     response.headers.add("Access-Control-Allow-Credentials", "true")
     return response, 200
 
-
-@bp.route('/admin/social-media', methods=['POST']) # Admin adiciona uma nova rede social
-@jwt_required()
-def create_social_media():
-    # CREATE de link de rede social (apenas admin)
-    admin_check = admin_required()
-    if admin_check:
-        return admin_check
-
-    data = request.get_json()
-    platform = data.get('platform')
-    url = data.get('url')
-
-    # Validação dos campos obrigatórios
-    if not platform or not url:
-        return jsonify({'error': 'platform e url são obrigatórios'}), 400
-
-    # Cria registro de rede social
-    new_social = SocialMedia(platform=platform, url=url)
-    db.session.add(new_social)
-    db.session.commit()
-
-    return jsonify({
-        'message': 'Rede social adicionada com sucesso',
-        'social_media': {'id': new_social.id, 'platform': new_social.platform, 'url': new_social.url}
-    })
-
 @bp.route('/admin/users', methods=['GET'])  # Admin visualiza todos os usuários cadastrados (COM BUSCA)
 def get_all_users():
     try:
@@ -547,7 +520,7 @@ def get_all_users():
                 "is_admin": user.is_admin,
                 "created_at": user.created_at.strftime('%Y-%m-%d %H:%M:%S'),
                 "name": user.name,
-                "is_active": user.is_active,   # 👈 AQUI
+                "is_active": user.is_active,   #  AQUI
             }
             for user in users
         ]
