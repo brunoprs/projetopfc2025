@@ -264,15 +264,4 @@ backend/
    - Configure `SQLALCHEMY_DATABASE_URI` como variável de ambiente
    - Remova credenciais hardcoded
 
-## 🤝 Contribuindo
 
-Se você encontrar problemas ou tiver sugestões de melhorias, sinta-se livre para:
-1. Criar uma issue
-2. Propor melhorias adicionais
-3. Adicionar testes unitários
-
----
-
-**Refatoração realizada em:** 2025-11-17  
-**Autor:** Manus AI  
-**Versão:** 1.0
