@@ -11,7 +11,6 @@ class Product(db.Model):
     image_url = db.Column(db.String(200))
     video_url = db.Column(db.String(200))
     
-    
 class User(db.Model):
     __tablename__ = 'users'
 

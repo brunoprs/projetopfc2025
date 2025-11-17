@@ -120,12 +120,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localh
 - ✅ Sistema de favoritos
 - ✅ Visualização de dicas e FAQs
 - ✅ Perfil de usuário
+- ✅ Buscar por tipo de piso especifico
 
 ### Para Administradores:
 - ✅ Gerenciamento de produtos (CRUD)
 - ✅ Criação de dicas
 - ✅ Criação de FAQs
 - ✅ Gerenciamento de usuários
+- ✅ Inativar usuarios
+- ✅ Buscar por tipo de piso especifico
+- ✅ Buscar por usuário especifico
 
 ---
 
