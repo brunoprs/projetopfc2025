@@ -1,11 +1,10 @@
-#!/usr/bin/env python3
+
 """Script para testar a API do PiFloor"""
 
 import requests
 import json
 from colorama import init, Fore, Style
 
-# Inicializar colorama para Windows
 init(autoreset=True)
 
 BASE_URL = "http://localhost:5000"

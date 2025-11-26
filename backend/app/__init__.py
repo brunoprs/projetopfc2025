@@ -4,27 +4,36 @@ from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_cors import CORS
+from dotenv import load_dotenv
 import os
+from sqlalchemy import text
+
+# Carrega .env
+load_dotenv()
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 migrate = Migrate()
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__, static_folder='static')
 
     # ==============================
     # Configurações principais
     # ==============================
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
-        'SQLALCHEMY_DATABASE_URI',
-        'mysql+mysqlconnector://root:%40Password123@localhost/pisos_db'
+        "SQLALCHEMY_DATABASE_URI",
+        "sqlite:///:memory:"  # fallback seguro para testes
     )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = os.getenv(
-        'JWT_SECRET_KEY',
-        '31f43bd2635de949e80f6cbbf14c9f9c06470d8bbb23453900001ed9707cbb96'
+        "JWT_SECRET_KEY",
+        "chave-de-teste"
     )
+
+    # Se testes quiserem sobrescrever config
+    if test_config:
+        app.config.update(test_config)
 
     # ==============================
     # Inicialização das extensões
@@ -33,7 +42,9 @@ def create_app():
     bcrypt.init_app(app)
     migrate.init_app(app, db)
 
-    # ✅ Configuração única e correta do CORS
+    # ==============================
+    # CORS
+    # ==============================
     CORS(
         app,
         resources={r"/*": {"origins": ["http://localhost:5173"]}},
@@ -54,6 +65,17 @@ def create_app():
         return User.query.get(int(identity))
 
     # ==============================
+    # Teste de conexão com banco
+    # ==============================
+    with app.app_context():
+        try:
+            db.session.execute(text("SELECT 1"))
+            print("Conexão com o banco OK!")
+        except Exception as e:
+            print("ERRO AO CONECTAR NO BANCO:")
+            print(e)
+
+    # ==============================
     # Blueprints
     # ==============================
     from .routes import bp as routes_bp
@@ -63,6 +85,5 @@ def create_app():
     def index():
         return render_template('index.html')
 
-    print("✅ Flask app rodando com CORS liberado para http://localhost:5173")
-
+    print("🚀 Flask app iniciado (create_app).")
     return app

@@ -1,6 +1,6 @@
 import google.generativeai as genai
 import os
-from dotenv import load_dotenv # 👈 IMPORTANTE
+from dotenv import load_dotenv 
 
 # 1. Carrega as variáveis do arquivo .env
 load_dotenv() 
