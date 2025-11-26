@@ -1,6 +1,3 @@
-# app/test/test_unit.py
-# TESTES 100% UNITÁRIOS (SEM FLASK, SEM JWT, SEM DB, SEM SQLALCHEMY QUERY)
-
 import pytest
 from datetime import datetime
 from unittest.mock import Mock
