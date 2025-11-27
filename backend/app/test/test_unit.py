@@ -43,22 +43,26 @@ def test_rating_valido():
 
 
 # ============================================================
-# 3 — SENHA FORTE
+# 3 — SENHA CADASTRÁVEL 
 # ============================================================
 
-def test_senha_forte():
-    def senha_forte(s: str) -> bool:
-        return (
-            len(s) >= 6
-            and any(c.isdigit() for c in s)
-            and any(c.isalpha() for c in s)
-        )
+def test_senha_cadastravel():
+    def senha_valida_para_cadastro(s: str) -> bool:
 
-    assert senha_forte("abc123") is True
-    assert senha_forte("Admin123!") is True
-    assert senha_forte("123456") is False
-    assert senha_forte("abcdef") is False
-    assert senha_forte("abc") is False
+        if s is None:
+            return False
+        return len(s) >= 6
+
+
+    assert senha_valida_para_cadastro("senha123") is True
+    assert senha_valida_para_cadastro("senhagrande123") is True
+    assert senha_valida_para_cadastro("senhagigantesca1234") is True
+
+
+    assert senha_valida_para_cadastro("123") is False
+    assert senha_valida_para_cadastro("") is False
+    assert senha_valida_para_cadastro("     ") is False
+    assert senha_valida_para_cadastro(None) is False
 
 
 # ============================================================
