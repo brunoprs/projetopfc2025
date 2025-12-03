@@ -409,7 +409,7 @@ export default function ProductDetails({ user }) {
           Pifloor Atende?
         </h3>
         <p className="text-sm text-gray-600 mb-3">
-          Digite seu CEP para verificar se entregamos e instalamos na sua região.
+          Digite seu CEP para verificar se entregamos e instalamos na sua região. (Atualmente atendemos apenas na região do Alto Tietê)
         </p>
         <div className="flex items-start gap-3">
           <Input
